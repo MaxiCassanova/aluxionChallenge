@@ -5,7 +5,8 @@ const { registerController,
         githubLoginController, 
         githubCallbackController,
         restorePasswordController,
-        changePasswordController } = require('../controllers/auth');
+        changePasswordController,
+        resetPasswordController } = require('../controllers/auth');
         
 const router = express.Router();
 
@@ -20,5 +21,7 @@ router.post('/github/callback', githubCallbackController);
 router.post('/restore', restorePasswordController);
 
 router.post('/change', changePasswordController);
+
+router.get('/reset/:token', resetPasswordController);
 
 module.exports = router;

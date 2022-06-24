@@ -32,7 +32,7 @@ const registerController = async (req, res) => {
         user.password = undefined;
         return res.status(200).json({user: user});
     } catch(e) {
-        return res.status(500).json({message: 'Something went wrong'});
+        return res.status(500).json({message: e.message});
     }
 }
 
@@ -54,7 +54,7 @@ const loginController = async (req, res) => {
             res.status(200).json({token: token});
         }
     } catch(e) {
-        res.status(500).json({message: 'Something went wrong'});
+        res.status(500).json({message: e.message});
     }
 }
 
@@ -156,13 +156,18 @@ const githubCallbackController = async (req, res) => {
     }
 }
 
+const resetPasswordController = async (req, res) => {
+    let token = req.params.token;
+    res.send('Imagine que hay un bonito formulario aqui para cambiar la contraseña,\n y luego le envia al endpoint:\n localhost:3000/api/auth/change... Su token es ' + token);
+}
 module.exports = {
     registerController,
     loginController,
     restorePasswordController,
     changePasswordController,
     githubLoginController,
-    githubCallbackController
+    githubCallbackController,
+    resetPasswordController
 }
 
 

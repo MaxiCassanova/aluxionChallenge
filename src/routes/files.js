@@ -17,7 +17,7 @@ router.post('/upload', authValidator, upload.single('file'), uploadController);
 
 router.get('/download', authValidator, downloadController);
 
-router.get('/manage', authValidator, manageController);
+router.post('/manage', authValidator, manageController);
 
 
 module.exports = router;
