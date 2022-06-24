@@ -48,7 +48,7 @@ const loginController = async (req, res) => {
         if(user) {
             const passwordFlag = await bcrypt.compare(req.body.password, user.password)
             if(!passwordFlag) {
-                res.status(400).json({message: 'Email or password incorrect'});
+                return res.status(400).json({message: 'Email or password incorrect'});
             }
             const token = jwt.sign({id: user._id}, JWT_SECRET, {expiresIn: JWT_EXPIRATION});
             res.status(200).json({token: token});
@@ -134,13 +134,20 @@ const githubCallbackController = async (req, res) => {
             return res.status(400).json({message: githubVerify.data.error});
         }
         let user;
-        for(let i = 0; i < githubVerify.data.length; i++) {
+        let i;
+        for(i = 0; i < githubVerify.data.length; i++) {
             if(githubVerify.data[i].primary) {
                 user = await Users.exists({email: githubVerify.data[i].email});
+                break;
             }
         }
         if(!user) {
-            return res.status(400).json({message: 'Email does not exist'});
+            // if user does not exist, create a new one
+            let userData = {
+                email: githubVerify.data[i].email,
+                password: await bcrypt.hash(githubVerify.data[i].email, saltOrRounds)
+            }
+            user = await Users.create(userData);
         }
         const token = jwt.sign({id: user._id}, JWT_SECRET, {expiresIn: JWT_EXPIRATION});
         return res.status(200).json({token: token});

@@ -1,6 +1,6 @@
 const express = require('express');
 const authRouter = require('./auth');
-const imageRouter = require('./image');
+const filesRouter = require('./files');
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
     }
 );
 router.use('/auth', authRouter);
-router.use('/images', imageRouter);
+router.use('/files', filesRouter);
+
 
 module.exports = router;
